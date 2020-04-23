@@ -1,4 +1,5 @@
 import pygame
+
 class Theme:
     WallGraphics = {
         'Rock'              : pygame.image.load('Images/Theme/Rock.png'),
@@ -20,3 +21,19 @@ class Theme:
         { '#':[WallGraphics['WoodBlockTall']] , ' ':[PathGraphics['GrassBlock']] },
         { '#':[WallGraphics['WoodBlockTall'],WallGraphics['WallBlockTall']] , ' ':[PathGraphics['GrassBlock']] }
     ]
+
+
+    Colors = {
+        'WHITE':(255,255,255),
+        'BLACK':(0,0,0),
+        'LIGHTBLUE':(0,170,255)
+    }
+
+    def getTitleFont():
+        return pygame.font.Font('fonts/crackman.ttf',60)
+    
+    def getMenuFont():
+        return pygame.font.Font('fonts/halo.ttf',40)
+    
+    def getInfoFont():
+        return pygame.font.Font('fonts/halo.ttf',25)

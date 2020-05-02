@@ -1,5 +1,4 @@
 import pygame
-from Credit import Credit
 from Level import Level
 from Player import Player
 from Theme import Theme
@@ -13,7 +12,6 @@ class Screen:
         self.DISPLAYSURF = displaySurf
         self.WINWIDTH = winWidth
         self.WINHEIGHT = winHeight
-        self.credit_instance = Credit(displaySurf,winWidth,winHeight)
         self.goalStar = pygame.image.load('Images/Theme/Star.png')
          
 

@@ -36,4 +36,4 @@ class Theme:
         return pygame.font.Font('fonts/halo.ttf',40)
     
     def getInfoFont():
-        return pygame.font.Font('fonts/halo.ttf',25)
+        return pygame.font.Font('fonts/astronBoy.ttf',25)

@@ -1,9 +1,13 @@
 import pygame
+from pygame.locals import *
+import sys
+
+
+from Credit import Credit
 from Level import Level
 from Player import Player
 from Theme import Theme
-from pygame.locals import *
-import sys
+from Ghost import Ghost
 
 #FONT and color collection 
 class Screen:
@@ -12,7 +16,13 @@ class Screen:
         self.DISPLAYSURF = displaySurf
         self.WINWIDTH = winWidth
         self.WINHEIGHT = winHeight
+        self.credit_instance = Credit(displaySurf,winWidth,winHeight)
         self.goalStar = pygame.image.load('Images/Theme/Star.png')
+        self.Clock = pygame.time.Clock()
+
+        self.TILEWIDTH = 50
+        self.TILEHEIGHT = 85
+        self.TILEFLOORHEIGHT = 40
          
 
     def starts(self):
@@ -44,8 +54,8 @@ class Screen:
         themelevel = Level("level/themeLevel.txt")
         BGCOLOR = (0,170,255)
         self.DISPLAYSURF.fill(BGCOLOR)
-        mapSurf = self.drawMap(themelevel.getCurLevelObj(),Theme.Themes[theme_no],list(Player.CharacterSprites.values())[playerSprite_no])
-
+        mapSurf = self.drawMap(themelevel.getCurLevelObj(),Theme.Themes[theme_no])
+        mapSurf = self.drawCharacter(mapSurf,list(Player.CharacterSprites.values())[playerSprite_no],themelevel.getCurLevelObj()['Start'])
         Font = Theme.getTitleFont()
 
         if themeSelect:
@@ -83,7 +93,11 @@ class Screen:
                         sys.exit()
                     elif event.key == K_RETURN:
                         return theme_no,playerSprite_no
-                    mapSurf = self.drawMap(themelevel.getCurLevelObj(),Theme.Themes[theme_no],list(Player.CharacterSprites.values())[playerSprite_no])
+                    
+                    
+                    mapSurf = self.drawMap(themelevel.getCurLevelObj(),Theme.Themes[theme_no])
+                    mapSurf = self.drawCharacter(mapSurf,list(Player.CharacterSprites.values())[playerSprite_no],themelevel.getCurLevelObj()['Start'])
+
                     mapSurfRect = mapSurf.get_rect()
                     mapSurfRect.center = (self.WINWIDTH/2,self.WINHEIGHT/2)
                     self.DISPLAYSURF.blit(mapSurf,mapSurfRect)
@@ -93,32 +107,51 @@ class Screen:
 
 
     def runLevel(self,levelObj,theme_no=0,playerSprite_no=0):
-        levelDisplayFont = Theme.getInfoFont()
+        
+        #set font and theme
+        DisplayFont = Theme.getInfoFont()
         selectedTheme,selectedPlayer = Theme.Themes[theme_no],list(Player.CharacterSprites.values())[playerSprite_no]
         
+        #get level no and total levels in level_no tuple
         level_no = self.level.levelInfo()
         MapRefresh = True
         LevelCompleted = False
 
+        #initialize all current level ghosts with speeds
+        cur_ghosts = []
+        print(levelObj['Ghosts'])
+        for i in levelObj['Ghosts']:
+            if i['type'] == 'V':
+                tmpGhost = Ghost(i,1.0,len(levelObj['map']))
+            else:
+                tmpGhost = Ghost(i,1.0,len(levelObj['map'][0]))
+            cur_ghosts.append(tmpGhost)
+            tmpGhost.getinfo()
+
+
         self.DISPLAYSURF.fill(Theme.Colors['LIGHTBLUE'])
         
         
-        levelSurf = levelDisplayFont.render('Level %s of %s' % level_no, 1, Theme.Colors['BLACK'])
+        levelSurf = DisplayFont.render('Level %s of %s' % level_no, 1, Theme.Colors['BLACK'])
         levelRect = levelSurf.get_rect()
         levelRect.bottomleft = (20, self.WINHEIGHT - 35)
         self.DISPLAYSURF.blit(levelSurf,levelRect)
 
-        mapSurf = self.drawMap(levelObj,selectedTheme,selectedPlayer)
+        mapSurf = self.drawMap(levelObj,selectedTheme)
+        mapSurf = self.drawCharacter(mapSurf,selectedPlayer,levelObj['Start'])
         mapSurfRect = mapSurf.get_rect()
         mapSurfRect.center = (self.WINWIDTH/2,self.WINHEIGHT/2)
         self.DISPLAYSURF.blit(mapSurf,mapSurfRect)
         pygame.display.update()
         
+        time_passed = 0.0
+
         #main game loop for level
         while not LevelCompleted:
             Move = None
-            KeyPressed = False
-            
+            KeyPressed = True
+
+
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
@@ -137,36 +170,57 @@ class Screen:
                         pygame.quit()
                         sys.exit()
             self.DISPLAYSURF.fill(Theme.Colors['LIGHTBLUE'])
+            timeSec = time_passed/1000.0
             if Move != None and not LevelCompleted:
                 moved,levelObj,LevelCompleted = self.level.makeMove(Move)
-                if moved:
-                    MapRefresh = True
+            #print(moved,levelObj,LevelCompleted)
+            mapSurf = self.drawMap(levelObj,selectedTheme)
+            mapSurf = self.drawCharacter(mapSurf,selectedPlayer,levelObj['Start'])
                 
-            if MapRefresh:
-                mapSurf = self.drawMap(levelObj,selectedTheme,selectedPlayer)
-                MapRefresh = False
+                
+            #check each ghost if moved and get new position
+            for ghst in cur_ghosts:
+                mvd,pos = ghst.Haunt(timeSec)
+                ghstSprite = ghst.getSprite()
+                mapSurf = self.drawCharacter(mapSurf,ghstSprite,pos)
+
+
+
+
+                
             
-            levelSurf = levelDisplayFont.render('Level %s of %s' % level_no, 1, Theme.Colors['BLACK'])
+            
+            levelSurf = DisplayFont.render('Level %s of %s' % level_no, 1, Theme.Colors['BLACK'])
             levelRect = levelSurf.get_rect()
             levelRect.bottomleft = (20, self.WINHEIGHT - 35)
             self.DISPLAYSURF.blit(levelSurf,levelRect)
             
+            
+            timeText =  DisplayFont.render('Time %s' % int(timeSec), 1, Theme.Colors['BLACK'])
+            timeRect = timeText.get_rect()
+            timeRect.topright = (self.WINWIDTH-20,35)
+            self.DISPLAYSURF.blit(timeText,timeRect)
+            
+            #mapSurf = pygame.transform.scale(mapSurf,(400,500))
             mapSurfRect = mapSurf.get_rect()
             mapSurfRect.center = (self.WINWIDTH/2,self.WINHEIGHT/2)
             self.DISPLAYSURF.blit(mapSurf,mapSurfRect)
             pygame.display.update()
-            #FPSLOCK.tick()
+
+            time_passed += self.Clock.tick()
+            
     
+    def drawCharacter(self,mapSurf,characterSprite,position):
+        i,j = position
+        characterSpriteRect = pygame.Rect((j*self.TILEWIDTH,i*self.TILEFLOORHEIGHT,self.TILEWIDTH,self.TILEHEIGHT))
+        mapSurf.blit(characterSprite,characterSpriteRect)
+        return mapSurf
 
-
-    def drawMap(self,levelObj,theme,playerSprite):
-        TILEWIDTH = 50
-        TILEHEIGHT = 85
-        TILEFLOORHEIGHT = 40
+    def drawMap(self,levelObj,theme):
         BGCOLOR = (  0, 170, 255)
 
-        mapSurfHeight = (len(levelObj['map'])-1) * TILEFLOORHEIGHT + TILEHEIGHT
-        mapSurfWidth = len(levelObj['map'][0])*TILEWIDTH
+        mapSurfHeight = (len(levelObj['map'])-1) * self.TILEFLOORHEIGHT + self.TILEHEIGHT
+        mapSurfWidth = len(levelObj['map'][0])*self.TILEWIDTH
         mapSurf = pygame.Surface((mapSurfWidth,mapSurfHeight))
         mapSurf.fill(BGCOLOR)
 
@@ -175,7 +229,7 @@ class Screen:
         # iterate through map and create graphics on mapSurf(MapSurface) 
         for i in range(len(levelObj['map'])):
             for j in range(len(levelObj['map'][0])):
-                spriteRect = pygame.Rect((j*TILEWIDTH,i*TILEFLOORHEIGHT,TILEWIDTH,TILEHEIGHT))
+                spriteRect = pygame.Rect((j*self.TILEWIDTH,i*self.TILEFLOORHEIGHT,self.TILEWIDTH,self.TILEHEIGHT))
                 if levelObj['map'][i][j] == '#' :
                     baseTile = theme['#'][k]
                     k = (k+1)%len(theme['#'])
@@ -184,9 +238,10 @@ class Screen:
                     l = (l+1)%len(theme[' '])
                 
                 mapSurf.blit(baseTile,spriteRect)
-
+                '''
                 if (i,j) == levelObj['Start']:
-                    mapSurf.blit(playerSprite, spriteRect)
-                elif (i,j) == levelObj['Goal']:
+                    mapSurf.blit(playerSprite, spriteRect)'''
+                if (i,j) == levelObj['Goal']:
                     mapSurf.blit(self.goalStar,spriteRect)
+        
         return mapSurf

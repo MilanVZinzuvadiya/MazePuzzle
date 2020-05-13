@@ -24,6 +24,7 @@ class Game:
         scr=Screen.Screen(self.DISPLAYSURF,self.WINWIDTH,self.WINHEIGHT)
         scr.starts()
         scr.runLevels()
+        scr.Credits()
 
     def GameExit():
         pygame.quit()

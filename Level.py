@@ -66,7 +66,6 @@ class Level:
                                 clevelMap[i][letr_no] = ' '
                 # make all line with same length by adding space at end
                 maxLen = len(max(clevelMap,key= lambda i: len(i)))
-                print(maxLen)
                 for i in range(len(clevelMap)):
                     if len(clevelMap[i]) < maxLen :
                         clevelMap[i] += (maxLen-len(clevelMap[i])) *" "
@@ -87,7 +86,7 @@ class Level:
     def makeMove(self,Move):
         level = self.getCurLevelObj()
         x,y = level['Start']
-        print(x,y)
+        
         if Move == 'left':
             y -= 1
         elif Move == 'right':
@@ -96,7 +95,7 @@ class Level:
             x -= 1
         else:
             x += 1
-        print(x,y)
+        
         if x < 0 or y < 0 or x >= len(level['map']) or y >= len(level['map'][0]):
             return False,level,False
 

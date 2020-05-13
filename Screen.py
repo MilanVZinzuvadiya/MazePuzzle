@@ -23,6 +23,8 @@ class Screen:
         self.TILEWIDTH = 50
         self.TILEHEIGHT = 85
         self.TILEFLOORHEIGHT = 40
+
+        self.GameOver = pygame.mixer.Sound('audio/pew_pew.wav')
          
 
     def starts(self):
@@ -36,7 +38,9 @@ class Screen:
         self.level = Level("level/MazePuzzle.txt")
         no_levels = self.level.levelInfo()[1]
         for i in range(no_levels):
-            self.runLevel(self.level.getCurLevelObj(),theme_no,playerSprite_no)
+            passed = self.runLevel(self.level.getCurLevelObj(),theme_no,playerSprite_no)
+            if passed == False:
+                break
             self.level.gotoNextLevel()
         self.fullScreenImageDisplay('Images/credit/logo.png',halt=2000)
 
@@ -119,7 +123,7 @@ class Screen:
 
         #initialize all current level ghosts with speeds
         cur_ghosts = []
-        print(levelObj['Ghosts'])
+        
         for i in levelObj['Ghosts']:
             if i['type'] == 'V':
                 tmpGhost = Ghost(i,1.0,len(levelObj['map']))
@@ -145,7 +149,7 @@ class Screen:
         pygame.display.update()
         
         time_passed = 0.0
-
+        levelPass = True
         #main game loop for level
         while not LevelCompleted:
             Move = None
@@ -183,6 +187,10 @@ class Screen:
                 mvd,pos = ghst.Haunt(timeSec)
                 ghstSprite = ghst.getSprite()
                 mapSurf = self.drawCharacter(mapSurf,ghstSprite,pos)
+                if pos == list(levelObj['Start']):
+                    LevelCompleted = True
+                    levelPass = False
+                    self.GameOver.play()
 
 
 
@@ -208,7 +216,7 @@ class Screen:
             pygame.display.update()
 
             time_passed += self.Clock.tick()
-            
+        return levelPass
     
     def drawCharacter(self,mapSurf,characterSprite,position):
         i,j = position

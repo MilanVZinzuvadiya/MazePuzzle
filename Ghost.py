@@ -29,7 +29,6 @@ class Ghost:
         return False,self.pos
 
     def getNextPosH(self):
-        print(self.pos[1],self.limit,self.pos[1])
         if self.pos[1] < self.limit and self.pos[1] > 0:
             self.pos[1] += self.direction
         else:
@@ -37,7 +36,6 @@ class Ghost:
             self.direction = 0-(self.direction)
 
     def getNextPosV(self):
-        print(self.pos[0],self.limit,self.pos[0])
         if self.pos[0] < self.limit and self.pos[0] > 0:
             self.pos[0] += self.direction
         else:
@@ -46,6 +44,6 @@ class Ghost:
     
     def getSprite(self):
         if self.type == 'V':
-            return pygame.image.load('Images/characters/catgirl.png')
+            return pygame.image.load('Images/ghosts/ghost1.png')
         else:
-            return pygame.image.load('Images/characters/horngirl.png')
+            return pygame.image.load('Images/ghosts/ghost2.png')

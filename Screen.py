@@ -54,8 +54,8 @@ class Screen:
 
     
     def Credits(self):
-        self.fullScreenImageDisplay('Images/credit/END.png',halt=2500)
-        self.fullScreenImageDisplay('Images/credit/logo.png',halt=2000)
+        self.fullScreenImageDisplay('Images/credit/Final.png',halt=5000)
+        self.fullScreenImageDisplay('Images/credit/END.png',halt=5000)
 
     def fullScreenImageDisplay(self,imagePath,halt=1500,BGCOLOR=(255,255,255)):
         if BGCOLOR !=None:

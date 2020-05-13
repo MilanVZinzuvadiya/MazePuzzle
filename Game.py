@@ -30,7 +30,7 @@ class Game:
             completed = scr.runLevels(theme_no,plyr_no)
             if not completed:
                 scr.story(plyr_no,Theme.retryStory)
-        scr.story(plyr_no,Theme.retryStory)
+        scr.story(plyr_no,Theme.thankYouStory)
         scr.Credits()
 
     def GameExit():

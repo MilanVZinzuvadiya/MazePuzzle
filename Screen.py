@@ -42,10 +42,20 @@ class Screen:
             if passed == False:
                 break
             self.level.gotoNextLevel()
+        #if last level is complete show congratulations
+        if passed:
+            self.fullScreenImageDisplay('Images/Credit/Congratulations.png',halt=2500,BGCOLOR=None)
+        else:
+            self.fullScreenImageDisplay('Images/Credit/replay.png',halt=2500,BGCOLOR=None)
+
+    
+    def Credits(self):
+        self.fullScreenImageDisplay('Images/credit/END.png',halt=2500)
         self.fullScreenImageDisplay('Images/credit/logo.png',halt=2000)
 
     def fullScreenImageDisplay(self,imagePath,halt=1500,BGCOLOR=(255,255,255)):
-        self.DISPLAYSURF.fill(BGCOLOR)
+        if BGCOLOR !=None:
+            self.DISPLAYSURF.fill(BGCOLOR)
         xImg1 = pygame.image.load(imagePath)
         xImg = xImg1.get_rect()
         xImg.centerx = int(self.WINWIDTH/2)
@@ -53,6 +63,17 @@ class Screen:
         self.DISPLAYSURF.blit(xImg1,xImg)
         pygame.display.update()
         pygame.time.wait(halt)
+
+    def waitKeyPressed(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == KEYDOWN:
+                    return event.key
+        return None
+
 
     def Selection(self,theme_no=0,playerSprite_no=0,themeSelect = True):
         themelevel = Level("level/themeLevel.txt")
@@ -63,12 +84,24 @@ class Screen:
         Font = Theme.getTitleFont()
 
         if themeSelect:
-            themeText = Font.render('Select Theme',1,(255,255,255))
+            themeText = Font.render('Select Theme',1,(25,25,25))
         else:
-            themeText = Font.render('Select Character',1,(255,255,255))
+            themeText = Font.render('Select Character',1,(25,25,25))
         themeTextRect = themeText.get_rect()
         themeTextRect.center = (self.WINWIDTH/2,90)
         self.DISPLAYSURF.blit(themeText,themeTextRect)
+        
+        Font2 = Theme.getInfoFont()
+        #text below selection
+        belowText = Font2.render('<<- use Arrow keys to change ->>',1,(0,0,0))
+        belowTextRect = belowText.get_rect()
+        belowTextRect.center = (self.WINWIDTH/2,self.WINHEIGHT-150)
+        self.DISPLAYSURF.blit(belowText,belowTextRect)
+
+        belowText2 = Font2.render('[Press Enter to select]',1,(0,0,0))
+        belowTextRect2 = belowText2.get_rect()
+        belowTextRect2.center = (self.WINWIDTH/2,self.WINHEIGHT-120)
+        self.DISPLAYSURF.blit(belowText2,belowTextRect2)
 
         mapSurfRect = mapSurf.get_rect()
         mapSurfRect.center = (self.WINWIDTH/2,self.WINHEIGHT/2)

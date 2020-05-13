@@ -36,7 +36,7 @@ class Theme:
             'I cannot see further..',
             'Besides that There Magician\'s ghosts are roaming on ways.',
             'Once Einstein told me : ',
-            'He can only see further because he stand on the shoulder of giants',
+            'He can only see further because he stand on the shoulder of Giants',
             'Be my Giant and Help me !',
             'Guide me with arrow keys to reach my Star-friends.'
         ]
@@ -57,7 +57,7 @@ class Theme:
         return pygame.font.Font('fonts/halo.ttf',40)
     
     def getInfoFont():
-        return pygame.font.Font('fonts/astronBoy.ttf',30)
+        return pygame.font.Font('fonts/carbon.ttf',25)
 
     def getStoryFont():
-        return pygame.font.Font('fonts/comic_andy.ttf',32)
+        return pygame.font.Font('fonts/carbon.ttf',27)

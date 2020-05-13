@@ -225,7 +225,7 @@ class Screen:
         mapSurfRect.center = (self.WINWIDTH/2,self.WINHEIGHT/2)
         self.DISPLAYSURF.blit(mapSurf,mapSurfRect)
         pygame.display.update()
-        
+        self.Clock.tick()
         time_passed = 0.0
         levelPass = True
         #main game loop for level

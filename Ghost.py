@@ -1,4 +1,5 @@
 import pygame
+import random
 class Ghost:
 
     def __init__(self,gh,speed,maxLimit):
@@ -8,6 +9,7 @@ class Ghost:
         self.interval = speed
         self.limit = maxLimit -1
         self.direction = 1
+        self.img = None
 
     def getinfo(self):
         print(self.type)
@@ -43,7 +45,15 @@ class Ghost:
             self.direction = 0-self.direction
     
     def getSprite(self):
+        #choose random image for ghost
+        if self.img == None:
+            s = 'Images/ghosts/ghost' + str(random.randint(1,4)) + '.png'
+            self.img = pygame.image.load(s)
+        return self.img
+        
+        '''
         if self.type == 'V':
             return pygame.image.load('Images/ghosts/ghost1.png')
         else:
             return pygame.image.load('Images/ghosts/ghost2.png')
+        '''

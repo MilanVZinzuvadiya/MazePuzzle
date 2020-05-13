@@ -29,6 +29,27 @@ class Theme:
         'LIGHTBLUE':(0,170,255)
     }
 
+    mainStory = [
+            'Hi ! I am Minky !',
+            'Evil Magician turn my friends into Stars.',
+            'I need to find My Friends',
+            'I cannot see further..',
+            'Besides that There Magician\'s ghosts are roaming on ways.',
+            'Once Einstein told me : ',
+            'He can only see further because he stand on the shoulder of giants',
+            'Be my Giant and Help me !',
+            'Guide me with arrow keys to reach my Star-friends.'
+        ]
+    
+    thankYouStory = [
+        'Thank you So much My FRIEND !',
+        'True Friends never apart. Maybe in distance but never in heart.'
+    ]
+    
+    retryStory = [
+        'Friends are Sunshine of life. Please Try Again to find my sunshine !'
+    ]
+
     def getTitleFont():
         return pygame.font.Font('fonts/crackman.ttf',60)
     
@@ -36,4 +57,7 @@ class Theme:
         return pygame.font.Font('fonts/halo.ttf',40)
     
     def getInfoFont():
-        return pygame.font.Font('fonts/astronBoy.ttf',25)
+        return pygame.font.Font('fonts/astronBoy.ttf',30)
+
+    def getStoryFont():
+        return pygame.font.Font('fonts/comic_andy.ttf',32)

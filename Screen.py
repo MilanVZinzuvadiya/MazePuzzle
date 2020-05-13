@@ -30,11 +30,12 @@ class Screen:
     def starts(self):
         #first display logo for 2 sec(2000 miliseconds)
         self.fullScreenImageDisplay('Images/credit/logo.png',halt=2000)
-    
-    def runLevels(self):
         theme_no,playerSprite_no = self.Selection()
         theme_no,playerSprite_no = self.Selection(theme_no,playerSprite_no,False)
 
+        return theme_no,playerSprite_no
+    
+    def runLevels(self,theme_no,playerSprite_no):
         self.level = Level("level/MazePuzzle.txt")
         no_levels = self.level.levelInfo()[1]
         for i in range(no_levels):
@@ -42,11 +43,14 @@ class Screen:
             if passed == False:
                 break
             self.level.gotoNextLevel()
+        
         #if last level is complete show congratulations
         if passed:
             self.fullScreenImageDisplay('Images/Credit/Congratulations.png',halt=2500,BGCOLOR=None)
+            return True
         else:
             self.fullScreenImageDisplay('Images/Credit/replay.png',halt=2500,BGCOLOR=None)
+            return False
 
     
     def Credits(self):
@@ -63,6 +67,47 @@ class Screen:
         self.DISPLAYSURF.blit(xImg1,xImg)
         pygame.display.update()
         pygame.time.wait(halt)
+
+    def story(self,playerSprite_no,story,BGCOLOR=(0,170,255),speed=250,waitKey=True):
+        
+        self.DISPLAYSURF.fill(BGCOLOR)
+        playerSprite = list(Player.CharacterSprites.values())[playerSprite_no]
+        
+        playerSprite = pygame.transform.scale(playerSprite,(150,150))
+
+        playerSprite1 = playerSprite.get_rect()
+        playerSprite1.centerx = int(self.WINWIDTH/2)
+        playerSprite1.centery = int(self.WINHEIGHT/2)
+
+
+        self.DISPLAYSURF.blit(playerSprite,playerSprite1)
+
+        
+        boxImg = pygame.image.load('Images/dialogue/box150.png')
+        boxImg1 = boxImg.get_rect()
+        boxImg1.bottomleft = (0,self.WINHEIGHT)
+        #self.DISPLAYSURF.blit(boxImg,boxImg1)
+        pygame.display.update()
+
+        
+        Font = Theme.getStoryFont()
+        for i in story:
+            Sentence = ""
+            for j in i.split(' '):
+                Sentence = Sentence + ' '+j
+                self.DISPLAYSURF.blit(boxImg,boxImg1)
+                line = Font.render(Sentence,1,(255,255,0))
+                lineRect = line.get_rect()
+                lineRect.center = (int(self.WINWIDTH/2),self.WINHEIGHT-75)
+                self.DISPLAYSURF.blit(line,lineRect)
+                pygame.time.wait(speed)
+                pygame.display.update()
+            if waitKey:
+                _ = self.waitKeyPressed()
+                
+
+
+
 
     def waitKeyPressed(self):
         while True:

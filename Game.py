@@ -1,6 +1,7 @@
 import pygame
 import Screen
 import sys
+from Theme import Theme
 
 class Game:
 
@@ -22,8 +23,14 @@ class Game:
         pygame.mixer.music.load('audio/ipsi.mp3')
         pygame.mixer.music.play(-1)
         scr=Screen.Screen(self.DISPLAYSURF,self.WINWIDTH,self.WINHEIGHT)
-        scr.starts()
-        scr.runLevels()
+        theme_no,plyr_no = scr.starts()
+        scr.story(plyr_no,Theme.mainStory)
+        completed = False
+        while not completed:
+            completed = scr.runLevels(theme_no,plyr_no)
+            if not completed:
+                scr.story(plyr_no,Theme.retryStory)
+        scr.story(plyr_no,Theme.retryStory)
         scr.Credits()
 
     def GameExit():

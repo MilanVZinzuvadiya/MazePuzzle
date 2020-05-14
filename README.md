@@ -18,5 +18,18 @@ To play **MazePuzzle Game** open terminal in Mazepuzzle dierctory and press ente
 python main.py
 ```
 
+## Theme Addition and Modification
+To add New themes Theme class contain all the necessary information. One can change Game Story.
+```python
+class Theme:
+    #dictionaries
+    WallGraphics = {}
+    PathGraphics = {}
+    Colors = {}
+    
+    #list
+    Themes = []
+```
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

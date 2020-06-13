@@ -32,4 +32,4 @@ class Theme:
 ```
 
 ## Contributing
-Pull requests are welcome. please open an issue first to discuss what you would like to change.
+Please open an issue first to discuss what you would like to change.

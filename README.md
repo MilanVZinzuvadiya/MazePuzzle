@@ -12,7 +12,7 @@ if pip installation conflicts are giving you trouble, You can try Anaconda versi
 conda install -r requirements.txt
 ```
 
-## How to Play ?
+## Game Play
 To play **MazePuzzle Game** open terminal in Mazepuzzle dierctory and press enter after typing below command:
 ```bash
 python main.py

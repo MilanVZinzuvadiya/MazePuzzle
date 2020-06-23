@@ -1,5 +1,5 @@
 # MazePuzzle
-Maze Puzzle is a fun game built using pygame.
+Maze Puzzle is a fun game built using Python Porgramming language with pygame module.
 
 ## Solving Dependencies
 Use requirements.txt to resolve dependencies with python.

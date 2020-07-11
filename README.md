@@ -1,4 +1,4 @@
-# MazePuzzle
+# MazePuzzle : Maze Adventure Game
 *Maze Puzzle* is a fun game built using Python Porgramming language with pygame module.
 
 ## Solving Dependencies

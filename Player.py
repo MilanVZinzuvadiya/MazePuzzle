@@ -1,4 +1,6 @@
 import pygame
+
+# player class for creating player in game
 class Player:
     CharacterSprites = {
             'princess': pygame.image.load('Images/characters/princess.png'),

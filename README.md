@@ -31,5 +31,5 @@ class Theme:
     Themes = []
 ```
 
-## Contributing
+## Contributing to the project of Mazepuzzle
 Please open an issue first to discuss what you would like to change.
